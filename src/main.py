@@ -32,17 +32,13 @@ def sitemap():
 
 @app.route('/users', methods=['GET'])
 def get_users():
-    # get all the people
-    users_alls = User.query.all()
-
-    # map the results and your list of people  inside of the all_people variable
-    result = list(map(lambda x: x.serialize(), users_alls))
+    users_all = User.query.all()
+    result = list(map(lambda x: x.serialize(), users_all))
 
     return jsonify(result), 200
 
 @app.route('/users/<int:id>/favorites', methods=['GET'])
 def get_user_favorites(id):
-    # get all the people
     item = User.query.get(id)
 
     if item is None:
@@ -50,50 +46,8 @@ def get_user_favorites(id):
 
     return jsonify(item.serializeFavorites()), 200
 
-@app.route('/people', methods=['GET'])
-def get_people():
-    # get all the people
-    people_alls = Character.query.all()
-
-    # map the results and your list of people  inside of the all_people variable
-    result = list(map(lambda x: x.serialize(), people_alls))
-
-    return jsonify(result), 200
-
-@app.route('/people/<int:id>', methods=['GET'])
-def get_people_detail(id):
-    # get all the people
-    item = Character.query.get(id)
-
-    if item is None:
-        raise APIException('Character not found', status_code=404)
-
-    return jsonify(item.serialize()), 200
-
-@app.route('/planets', methods=['GET'])
-def get_planets():
-    # get all the people
-    planets_alls = Planet.query.all()
-
-    # map the results and your list of people  inside of the all_people variable
-    result = list(map(lambda x: x.serialize(), planets_alls))
-
-    return jsonify(result), 200
-
-@app.route('/planets/<int:id>', methods=['GET'])
-def get_planet_detail(id):
-    # get all the people
-    item = Planet.query.get(id)
-
-    if item is None:
-        raise APIException('Planet not found', status_code=404)
-
-    return jsonify(item.serialize()), 200
-
-
 @app.route('/users/<int:id>/favorites', methods=['POST'])
 def add_favorites(id):
-    # get all the people
     item = User.query.get(id)
     body = request.get_json()
 
@@ -125,9 +79,40 @@ def add_favorites(id):
             
     return "OK", 200
 
+@app.route('/people', methods=['GET'])
+def get_people():
+    people_alls = Character.query.all()
+    result = list(map(lambda x: x.serialize(), people_alls))
+
+    return jsonify(result), 200
+
+@app.route('/people/<int:id>', methods=['GET'])
+def get_people_detail(id):
+    item = Character.query.get(id)
+
+    if item is None:
+        raise APIException('Character not found', status_code=404)
+
+    return jsonify(item.serialize()), 200
+
+@app.route('/planets', methods=['GET'])
+def get_planets():
+    planets_alls = Planet.query.all()
+    result = list(map(lambda x: x.serialize(), planets_alls))
+
+    return jsonify(result), 200
+
+@app.route('/planets/<int:id>', methods=['GET'])
+def get_planet_detail(id):
+    item = Planet.query.get(id)
+
+    if item is None:
+        raise APIException('Planet not found', status_code=404)
+
+    return jsonify(item.serialize()), 200
+
 @app.route('/favorite/<int:id>', methods=['DELETE'])
 def remove_favorites(id):
-    # get all the people
     body = request.get_json()
 
     if body is None:
