@@ -2,25 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-#     password = db.Column(db.String(80), unique=False, nullable=False)
-#     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.username
-
-#     def serialize(self):
-#         return {
-#             "id": self.id,
-#             "email": self.email,
-#             # do not serialize the password, its a security breach
-#         }
-
 class User(db.Model):
     __tablename__ = "user"
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), unique=True, nullable=False)
     fullname = db.Column(db.String(250), unique=False, nullable=False)
@@ -40,7 +23,6 @@ class User(db.Model):
             "lastname": self.lastname,
             "characterfavorites": list(map(lambda x: x.serializebyUser(), self.characterfavorites)),
             "planetfavorites": list(map(lambda x: x.serializebyUser(), self.planetfavorites)),
-            # do not serialize the password, its a security breach,
         }
 
     def serializeFavorites(self):
@@ -48,12 +30,10 @@ class User(db.Model):
             "id": self.id,
             "characterfavorites": list(map(lambda x: x.serializebyUser(), self.characterfavorites)),
             "planetfavorites": list(map(lambda x: x.serializebyUser(), self.planetfavorites)),
-            # do not serialize the password, its a security breach,
         }
 
 class Character(db.Model):
     __tablename__ = "character"
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String(500), unique=False, nullable=False)
@@ -80,12 +60,10 @@ class Character(db.Model):
             "birth_year": self.birth_year,
             "gender": self.gender,
             "favorites": list(map(lambda x: x.serializebyCharacter(), self.favorites))
-            # do not serialize the password, its a security breach
         }
 
 class Planet(db.Model):
     __tablename__ = "planet"
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String(500), unique=False, nullable=False)
@@ -115,12 +93,10 @@ class Planet(db.Model):
             "terrain": self.terrain,
             "surface_water": self.surface_water,
             "favorites": list(map(lambda x: x.serializebyPlanet(), self.favorites))
-            # do not serialize the password, its a security breach
         }
 
 class CharacterFavorite(db.Model):
     __tablename__ = 'characterfavorite'
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
     characterid = db.Column(db.Integer, db.ForeignKey('character.id'))
@@ -134,19 +110,16 @@ class CharacterFavorite(db.Model):
         return {
             "id": self.id,
             "characterid": self.characterid,            
-            # do not serialize the password, its a security breach
         }
 
     def serializebyCharacter(self):
         return {
             "id": self.id,
             "userid": self.userid,            
-            # do not serialize the password, its a security breach
         }
 
 class PlanetFavorite(db.Model):
     __tablename__ = 'planetfavorite'
-    # Notice that each column is also a normal Python instance attribute.
     id = db.Column(db.Integer, primary_key=True)
     planetid = db.Column(db.Integer, db.ForeignKey('planet.id'))
     userid = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -158,12 +131,10 @@ class PlanetFavorite(db.Model):
         return {
             "id": self.id,
             "planetid": self.planetid,            
-            # do not serialize the password, its a security breach
         }
 
     def serializebyPlanet(self):
         return {
             "id": self.id,
             "userid": self.userid,            
-            # do not serialize the password, its a security breach
         }
